@@ -1,12 +1,12 @@
 {
-    "name": "riari/laravel-forum",
-    "description": "A Laravel 4/5 package providing a solid foundation for building discussion forums",
+    "name": "myrandor/laravel-forum",
+    "description": "A fork of riari/laravel-forum",
     "keywords": ["laravel", "laravel-4", "laravel-5", "forum", "discuss"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Riari",
-            "email": "hello@ricko.me"
+            "name": "Myrandor",
+            "email": "hello@dontsendemail.me"
         }
     ],
     "require": {
@@ -16,10 +16,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Riari\\Forum\\": "src"
+            "Myrandor\\Forum\\": "src"
         }
     },
     "suggest": {
-        "riari/laravel-forum-frontend": "The standard forum frontend that provides views written with Bootstrap 3"
+        "myrandor/laravel-forum-frontend": "A fork of riari/laravel-forum-frontend"
     }
 }
