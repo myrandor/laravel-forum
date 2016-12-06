@@ -13,6 +13,12 @@
             "email": "git@myrandor.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Riari/laravel-forum"
+        }
+    ],
     "require": {
         "php": ">=5.4.0",
         "laravel/framework": "~5.1",
