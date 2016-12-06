@@ -1,12 +1,16 @@
 {
-    "name": "myrandor/laravel-forum",
+    "name": "riari/laravel-forum",
     "description": "A fork of riari/laravel-forum",
     "keywords": ["laravel", "laravel-4", "laravel-5", "forum", "discuss"],
     "license": "MIT",
     "authors": [
         {
+            "name": "Riari",
+            "email": "hello@ricko.me"
+        },
+        {
             "name": "Myrandor",
-            "email": "hello@dontsendemail.me"
+            "email": "git@myrandor.com"
         }
     ],
     "require": {
@@ -16,10 +20,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Myrandor\\Forum\\": "src"
+            "Riari\\Forum\\": "src"
         }
     },
     "suggest": {
-        "myrandor/laravel-forum-frontend": "A fork of riari/laravel-forum-frontend"
+        "riari/laravel-forum-frontend": "A fork of riari/laravel-forum-frontend"
     }
 }
