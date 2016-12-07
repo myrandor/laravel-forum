@@ -25,6 +25,7 @@ return [
     'posted'            => "Posted",
     'private'           => "Private",
     'proceed'           => "Proceed",
+    'read'              => "Read",
     'quick_reply'       => "Quick reply",
     'rename'            => "Rename",
     'reorder'           => "Reorder",
@@ -35,7 +36,9 @@ return [
     'response_to'       => "In response to :item",
     'restore'           => "Restore",
     'subject'           => "Subject",
+    'subscribed'        => "Subscribed",
     'title'             => "Title",
+    'unread'            => "Unread",
     'weight'            => "Weight",
     'with_selection'    => "With selection…",
 

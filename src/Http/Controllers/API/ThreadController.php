@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
+use Riari\Forum\Models\Subscribe;
 
 class ThreadController extends BaseController
 {
@@ -17,6 +18,16 @@ class ThreadController extends BaseController
     protected function model()
     {
         return new Thread;
+    }
+
+    /**
+     * Return the model to use for this controller.
+     *
+     * @return Thread
+     */
+    protected function model_subscribe()
+    {
+        return new Subscribe;
     }
 
     /**
@@ -332,4 +343,114 @@ class ThreadController extends BaseController
     {
         return $this->bulk($request, 'unpin', 'updated');
     }
+
+    /**
+     * PATCH: Subscribe a thread.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function subscribe($id, Request $request)
+    {
+        $primaryKey = auth()->user()->getKeyName();
+        $userID = auth()->user()->{$primaryKey};
+
+        $data = ['thread_id' => $id, 'user_id' => $userID];
+        $thread = $this->model_subscribe()->getIndex($id, $userID)->get();
+//        if (!$thread) {
+//            $thread = $this->model_subscribe();
+//        }
+
+//        $subscribe = (!is_null($thread)) ? $thread : null;
+//        $subscribe (!is_null($thread)) ? true : false;
+
+//        $thread = $this->model_subscribe()->where('subscribe', 1)->find($id);
+
+//        $category = !is_null($thread) ? $thread->category : [];
+
+        return $this->subscribeAction($thread, $data, true, 'subscribe');
+    }
+
+    /**
+     * PATCH: Unsubscribe a thread.
+     *
+     * @param  int  $id
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function unsubscribe($id, Request $request)
+    {
+        $primaryKey = auth()->user()->getKeyName();
+        $userID = auth()->user()->{$primaryKey};
+
+        $data = ['thread_id' => $id, 'user_id' => $userID];
+        $thread = $this->model_subscribe()->getIndex($id, $userID)->get();
+//        if (!$thread) {
+//            $thread = $this->model_subscribe();
+//        }
+
+//        $subscribe = (!is_null($thread)) ? $thread : null;
+//        $subscribe (!is_null($thread)) ? true : false;
+
+//        $thread = $this->model_subscribe()->where('subscribe', 1)->find($id);
+
+//        $category = !is_null($thread) ? $thread->category : [];
+
+        return $this->subscribeAction($thread, $data, false, 'unsubscribe');
+    }
+
+    /**
+     * PATCH: Subscribe threads in bulk.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function bulkSubscribe(Request $request)
+    {
+        return $this->bulk($request, 'subscribe', 'updated');
+    }
+
+    /**
+     * PATCH: Unsubscribe threads in bulk.
+     *
+     * @param  Request  $request
+     * @return JsonResponse|Response
+     */
+    public function bulkUnsubscribe(Request $request)
+    {
+        return $this->bulk($request, 'unsubscribe', 'updated');
+    }
+
+    /**
+     * Update a given subscribe's attributes.
+     *
+     * @param  Model  $model
+     * @param  array  $data
+     * @param  boolean  $subscribe
+     * @return JsonResponse|Response
+     */
+    public function subscribeAction($model, $data, $subscribe)
+    {
+        if (is_null($data)) {
+            return $this->notFoundResponse();
+        }
+
+        $item = $this->model_subscribe()->getIndex($data['thread_id'], $data['user_id']);
+
+        if ($subscribe) {
+            if (!$item->get()) {
+                $this->model_subscribe()->create($data);
+            }
+        } else {
+            if ($item->get()) {
+                $item->delete();
+            }
+        }
+
+        return $this->response($model, $this->trans('updated'));
+
+//        return Response::json(false);
+	}
+
 }

@@ -210,4 +210,38 @@ class Thread extends BaseModel
 
         return $this;
     }
+
+
+    /**
+     * Helper: If the current thread is subscribed or not
+     *
+     * @return boolean
+     */
+    public function subscribeSearch()
+    {
+        return $this->belongsToMany(
+            config('forum.integration.user_model'),
+            'forum_threads_subscription',
+            'thread_id',
+            'user_id'
+        );
+    }
+
+
+    /**
+     * Attributes: If the current thread is subscribed or not
+     *
+     * @return mixed
+     */
+    public function getSubscribeStatusAttribute()
+    {
+        if (auth()->check()) {
+            $subscribe = $this->subscribeSearch()->where('user_id', auth()->user()->getKey())->first();
+
+            return (!is_null($subscribe)) ? $subscribe : null;
+        }
+
+        return null;
+    }
+
 }

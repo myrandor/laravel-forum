@@ -66,6 +66,8 @@ $r->group(
             $r->patch('unlock', ['as' => 'unlock', 'uses' => 'ThreadController@bulkUnlock']);
             $r->patch('pin', ['as' => 'pin', 'uses' => 'ThreadController@bulkPin']);
             $r->patch('unpin', ['as' => 'unpin', 'uses' => 'ThreadController@bulkUnpin']);
+            $r->patch('subscribe', ['as' => 'subscribe', 'uses' => 'ThreadController@bulkSubscribe']);
+            $r->patch('unsubscribe', ['as' => 'unsubscribe', 'uses' => 'ThreadController@bulkUnsubscribe']);
         });
 
         // Posts

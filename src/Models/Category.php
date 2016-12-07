@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Gate;
 use Riari\Forum\Support\Traits\CachesData;
+use DB;
 
 class Category extends BaseModel
 {
@@ -26,7 +27,7 @@ class Category extends BaseModel
 	 *
 	 * @var array
 	 */
-    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private', 'thread_count', 'post_count'];
+    protected $fillable = ['category_id', 'title', 'description', 'weight', 'enable_threads', 'private', 'thread_count', 'post_count', 'hasNewPosts'];
 
     /**
      * Create a new category model instance.
@@ -169,5 +170,42 @@ class Category extends BaseModel
 
             return $depth;
         });
+    }
+
+    public function getHasNewPostsAttribute() {
+        if(!\Auth::id()) {
+            return false;
+        }
+
+        $time = time();
+        $age = strtotime(config('forum.preferences.old_thread_threshold'), 0);
+        $cutoff = $time - $age;
+
+        // Get list of read threads for the user
+        $read = DB::table('forum_threads_read')
+                    ->where('user_id', '=', \Auth::id())
+                    ->where('updated_at', '>=', date('Y-m-d H:i:s', $cutoff))
+                    ->pluck('updated_at', 'thread_id');
+
+        $new = DB::table('forum_threads')
+                    ->whereNotIn('id', $read)
+                    ->where('updated_at', '>', date('Y-m-d H:i:s', $cutoff))
+                    ->where('category_id', '=', $this->id)
+                    ->pluck('updated_at', 'id');
+
+
+        $unread = 0;
+
+        foreach($new as $key => $thread) {
+            if(array_key_exists($key, $read)) {
+                if($new[$key] > $read[$key]) {
+                    $unread++;
+                }
+            } else {
+                $unread++;
+            }
+        }
+
+        return $unread;
     }
 }

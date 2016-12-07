@@ -3,6 +3,7 @@
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Riari\Forum\Models\Traits\HasAuthor;
 use Riari\Forum\Support\Traits\CachesData;
+use DB;
 
 class Post extends BaseModel
 {
@@ -86,4 +87,7 @@ class Post extends BaseModel
             }
         }
     }
+
+
+
 }

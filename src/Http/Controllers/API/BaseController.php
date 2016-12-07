@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Routing\Controller;
+use DB;
 
 abstract class BaseController extends Controller
 {
@@ -166,6 +167,35 @@ abstract class BaseController extends Controller
     }
 
     /**
+     * Carry out a subscribe action.
+     *
+     * @param  Request  $request
+     * @param  string  $action
+     * @param  string  $transKey
+     * @param  array  $input
+     * @return JsonResponse|Response
+     */
+/*
+    protected function subscribe(Request $request, $action, $transKey, array $input = [])
+    {
+        $this->validate($request, ['items' => 'required']);
+
+        $items = $request->input('items');
+        $request->replace($input);
+        $models = collect();
+
+        foreach ($items as $id) {
+            $response = $this->{$action}($id, $request);
+
+            if (!$response->isNotFound()) {
+                return $response;
+            }
+        }
+
+        return $this->response($models, $this->trans($transKey, $models->count()));
+    }
+*/
+    /**
      * Update a given model's attributes.
      *
      * @param  Model  $model
@@ -186,6 +216,37 @@ abstract class BaseController extends Controller
         return $this->response($model, $this->trans('updated'));
     }
 
+    /**
+     * Update a given subscribe's attributes.
+     *
+     * @param  Model  $model
+     * @param  array  $data
+     * @param  boolean  $subscribe
+     * @return JsonResponse|Response
+     */
+/*
+    protected function updateSubscribe($model, $data, $subscribe)
+    {
+        if (is_null($data) || is_null($model) || !$model->exists) {
+            return $this->notFoundResponse();
+        }
+
+        if ($status) {
+            if (!$item->get()) {
+                Subscribe::create($data);
+            }
+            return Response::json(true);
+        } else {
+            if ($item->get()) {
+                $item->delete();
+            }
+            return Response::json(true);
+        }
+
+
+        return $this->response($model, $this->trans('updated'));
+    }
+*/
     /**
      * Delete a model.
      *
