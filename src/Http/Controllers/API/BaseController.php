@@ -217,37 +217,6 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Update a given subscribe's attributes.
-     *
-     * @param  Model  $model
-     * @param  array  $data
-     * @param  boolean  $subscribe
-     * @return JsonResponse|Response
-     */
-/*
-    protected function updateSubscribe($model, $data, $subscribe)
-    {
-        if (is_null($data) || is_null($model) || !$model->exists) {
-            return $this->notFoundResponse();
-        }
-
-        if ($status) {
-            if (!$item->get()) {
-                Subscribe::create($data);
-            }
-            return Response::json(true);
-        } else {
-            if ($item->get()) {
-                $item->delete();
-            }
-            return Response::json(true);
-        }
-
-
-        return $this->response($model, $this->trans('updated'));
-    }
-*/
-    /**
      * Delete a model.
      *
      * @param  Model  $model

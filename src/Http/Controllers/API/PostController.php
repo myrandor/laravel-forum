@@ -3,6 +3,7 @@
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Riari\Forum\Models\Post;
+use Riari\Forum\Models\Subscribe;
 use Riari\Forum\Models\Thread;
 
 class PostController extends BaseController
@@ -15,6 +16,16 @@ class PostController extends BaseController
     protected function model()
     {
         return new Post;
+    }
+
+    /**
+     * Return the model to use for this controller.
+     *
+     * @return Thread
+     */
+    protected function model_subscribe()
+    {
+        return new Subscribe;
     }
 
     /**
@@ -76,6 +87,41 @@ class PostController extends BaseController
         $post = $this->model()->create($request->only(['thread_id', 'post_id', 'author_id', 'content']));
         $post->load('thread');
 
+        $data = ['thread_id' => $request->thread_id, 'user_id' => $request->author_id];
+        $subscribe = $this->subscribeAction($thread, $data, true, 'subscribe');
+
         return $this->response($post, $this->trans('created'), 201);
     }
+
+
+
+    /**
+     * Update a given subscribe's attributes.
+     *
+     * @param  Model  $model
+     * @param  array  $data
+     * @param  boolean  $subscribe
+     * @return JsonResponse|Response
+     */
+    public function subscribeAction($model, $data, $subscribe)
+    {
+        if (is_null($data)) {
+            return $this->notFoundResponse();
+        }
+
+        $item = $this->model_subscribe()->getIndex($data['thread_id'], $data['user_id']);
+
+        if ($subscribe) {
+            if (!$item->get()) {
+                $this->model_subscribe()->create($data);
+            }
+        } else {
+            if ($item->get()) {
+                $item->delete();
+            }
+        }
+
+        return $this->response($model, $this->trans('updated'));
+
+	}
 }

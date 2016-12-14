@@ -110,6 +110,9 @@ class ThreadController extends BaseController
         $thread = $this->model()->create($request->only(['category_id', 'author_id', 'title']));
         Post::create(['thread_id' => $thread->id] + $request->only('author_id', 'content'));
 
+        $data = ['thread_id' => $thread->id, 'user_id' => $request->author_id];
+        $subscribe = $this->subscribeAction($thread, $data, true, 'subscribe');
+
         return $this->response($thread, 201);
     }
 
@@ -358,16 +361,6 @@ class ThreadController extends BaseController
 
         $data = ['thread_id' => $id, 'user_id' => $userID];
         $thread = $this->model_subscribe()->getIndex($id, $userID)->get();
-//        if (!$thread) {
-//            $thread = $this->model_subscribe();
-//        }
-
-//        $subscribe = (!is_null($thread)) ? $thread : null;
-//        $subscribe (!is_null($thread)) ? true : false;
-
-//        $thread = $this->model_subscribe()->where('subscribe', 1)->find($id);
-
-//        $category = !is_null($thread) ? $thread->category : [];
 
         return $this->subscribeAction($thread, $data, true, 'subscribe');
     }
@@ -450,7 +443,6 @@ class ThreadController extends BaseController
 
         return $this->response($model, $this->trans('updated'));
 
-//        return Response::json(false);
 	}
 
 }
