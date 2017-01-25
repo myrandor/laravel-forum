@@ -7,6 +7,7 @@ use Riari\Forum\Models\Category;
 use Riari\Forum\Models\Post;
 use Riari\Forum\Models\Thread;
 use Riari\Forum\Models\Subscribe;
+use DB;
 
 class ThreadController extends BaseController
 {
@@ -110,8 +111,12 @@ class ThreadController extends BaseController
         $thread = $this->model()->create($request->only(['category_id', 'author_id', 'title']));
         Post::create(['thread_id' => $thread->id] + $request->only('author_id', 'content'));
 
-        $data = ['thread_id' => $thread->id, 'user_id' => $request->author_id];
-        $subscribe = $this->subscribeAction($thread, $data, true, 'subscribe');
+        // Subscribe anyone on new thread
+        $users = DB::table('users')->whereConfirmed(1)->get();
+        foreach ($users as $user) {
+            $data = ['thread_id' => $thread->id, 'user_id' => $user->id];
+            $subscribe = $this->subscribeAction($thread, $data, true, 'subscribe');
+        }
 
         return $this->response($thread, 201);
     }
