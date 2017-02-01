@@ -4,6 +4,7 @@ return [
 
     'actions'           => "Action|Actions",
     'author'            => "Auteur",
+    'at'                => "à",
     'cancel'            => "Annuler",
     'create'            => "Créer",
     'delete'            => "Supprimer",
